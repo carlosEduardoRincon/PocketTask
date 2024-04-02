@@ -10,6 +10,8 @@ public class Task {
     private String priority;
     private boolean completed;
 
+    public Task() {}
+
     public Task(String title, String description, Date deadline, String priority, boolean completed) {
         this.title = title;
         this.description = description;
