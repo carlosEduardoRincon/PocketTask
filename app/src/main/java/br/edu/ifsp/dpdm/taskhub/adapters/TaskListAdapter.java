@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import br.edu.ifsp.dpdm.taskhub.R;
 import br.edu.ifsp.dpdm.taskhub.model.Task;
 
 public class TaskListAdapter extends BaseAdapter {

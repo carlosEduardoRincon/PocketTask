@@ -1,22 +1,17 @@
 package br.edu.ifsp.dpdm.taskhub;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import br.edu.ifsp.dpdm.taskhub.adapters.TaskListAdapter;
-import br.edu.ifsp.dpdm.taskhub.dao.TaskRepository;
 import br.edu.ifsp.dpdm.taskhub.dao.entities.TaskDAO;
 import br.edu.ifsp.dpdm.taskhub.model.Task;
 
@@ -29,8 +24,8 @@ public class TaskManager extends Activity {
     private EditText edTitle;
     private EditText edDescription;
     private EditText edDeadline;
-    private EditText edCompleted;
-    private ListView lvTasks;
+    private CheckBox edCompleted;
+
     private String operation;
     private Spinner spPriority;
     private String[] priorities = {"High", "Medium", "Easy"};
@@ -39,40 +34,18 @@ public class TaskManager extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
         edID = (EditText) findViewById(R.id.edID);
-        edTitle = (EditText) findViewById(R.id.edNome);
-        edDescription = (EditText) findViewById(R.id.edIdade);
+        edTitle = (EditText) findViewById(R.id.edTitle);
+        edDescription = (EditText) findViewById(R.id.edDescription);
+        edDeadline = (EditText) findViewById(R.id.edDeadline);
         spPriority = (Spinner) findViewById(R.id.spPriority);
-        lvTasks = (ListView) findViewById(R.id.lvTasks);
-        lvTasks.setOnItemClickListener(selectTasks);
-        lvTasks.setOnItemLongClickListener(removeTask);
-        tasks = new ArrayList<>();
-        operation = "New";
+        edCompleted = (CheckBox) findViewById(R.id.ckCompleted);
         taskDAO = new TaskDAO(getApplicationContext());
+
+        operation = "New";
+
         loadPriorities();
-        refreshList();
-    }
-
-    private void removeTask(final int idFuncionario) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Excluir funcionario?")
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setMessage("Deseja excluir essa funcionario?")
-                .setCancelable(false)
-                .setPositiveButton(getString(R.string.sim),
-                        (dialog, id) -> {
-                            if (taskDAO.deletar(idFuncionario)) {
-                                refreshList();
-                                showMessage(getString(R.string.msgExclusao));
-                            } else {
-                                showMessage(getString(R.string.msgFalhaExclusao));
-                            }
-
-                        })
-                .setNegativeButton(getString(R.string.nao),
-                        (dialog, id) -> dialog.cancel());
-        builder.create();
-        builder.show();
     }
 
     private void loadPriorities() {
@@ -88,25 +61,23 @@ public class TaskManager extends Activity {
 
     public void saveTask(View v) {
 
-        if (operation.equalsIgnoreCase("Novo")) {
+        if (operation.equalsIgnoreCase("New")) {
             t = new Task();
         }
 
         t.setTitle(edTitle.getText().toString());
 
-        t.setPriority(priorities[spPriority.getSelectedItemPosition()]
-                .equalsIgnoreCase("Masculino") ? "M" : "F");
+        t.setPriority(priorities[spPriority.getSelectedItemPosition()]);
         t.setDescription(edDescription.getText().toString());
 
-        if (operation.equalsIgnoreCase("Novo")) {
+        if (operation.equalsIgnoreCase("new")) {
             taskDAO.salvar(t);
-            showMessage("Funcionário cadastrado com sucesso!");
+            showMessage("Task added with success!");
         } else {
             taskDAO.atualizar(t);
-            showMessage("Funcionário atualizado com sucesso!");
+            showMessage("Task updated with success!");
         }
 
-        refreshList();
         cleanData();
     }
 
@@ -124,28 +95,8 @@ public class TaskManager extends Activity {
         spPriority.setSelection(0);
     }
 
-    private void refreshList() {
-        tasks = taskDAO.listAll();
-        if (tasks != null) {
-            tasks.size();
-            TaskListAdapter pla = new TaskListAdapter(
-                    getApplicationContext(), tasks);
-            lvTasks.setAdapter(pla);
-        }
-    }
 
-    private AdapterView.OnItemClickListener selectTasks = (arg0, arg1, pos, id) -> {
-        operation = "Atualizar";
-        t = tasks.get(pos);
-        loadData(t);
-    };
-
-    private AdapterView.OnItemLongClickListener removeTask = (arg0, arg1, pos, arg3) -> {
-        removeTask(tasks.get(pos).getId());
-        return true;
-    };
-
-    private void loadData(Task task) {
+    public void loadData(Task task) {
         edID.setText(String.valueOf(task.getId()));
         edTitle.setText(task.getTitle());
         edDescription.setText(task.getDescription());
@@ -155,5 +106,12 @@ public class TaskManager extends Activity {
 
     private void showMessage(String msg) {
         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent it = new Intent();
+        setResult(4, it);
+        finish();
     }
 }
