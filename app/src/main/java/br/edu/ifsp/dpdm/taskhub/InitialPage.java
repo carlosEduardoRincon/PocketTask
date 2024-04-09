@@ -35,9 +35,9 @@ public class InitialPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.initial_page);
 
-        Button abrirCalculator = findViewById(R.id.btAdd);
-        abrirCalculator.setOnClickListener(arg0 -> {
-            Intent it = new Intent(getApplicationContext(), TaskManager.class);
+        Button openTaskForm = findViewById(R.id.btAdd);
+        openTaskForm.setOnClickListener(arg0 -> {
+            Intent it = new Intent(getApplicationContext(), TaskManager.class).putExtra("operation", "update");
             mStartForResult.launch(it);
         });
 
@@ -53,9 +53,11 @@ public class InitialPage extends AppCompatActivity {
 
     private AdapterView.OnItemClickListener selectTasks = new AdapterView.OnItemClickListener() {
         public void onItemClick(AdapterView<?> arg0, View arg1, int pos, long id) {
-            operation = "Atualizar";
             t = tasks.get(pos);
-            //loadData(t);
+            Intent it = new Intent(getApplicationContext(), TaskManager.class);
+            it.putExtra("selectedItem", t);
+            it.putExtra("operation", "Update");
+            mStartForResult.launch(it);
         }
     };
 
@@ -81,8 +83,6 @@ public class InitialPage extends AppCompatActivity {
         builder.show();
     }
 
-
-
     public void refreshList() {
         tasks = taskDAO.listAll();
         if (tasks != null) {
@@ -97,8 +97,6 @@ public class InitialPage extends AppCompatActivity {
         removeTask(tasks.get(pos).getId());
         return true;
     };
-
-
 
     private void showMessage(String msg) {
         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();

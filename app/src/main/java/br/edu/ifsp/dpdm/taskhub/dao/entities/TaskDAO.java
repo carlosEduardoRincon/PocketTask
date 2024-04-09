@@ -4,10 +4,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import br.edu.ifsp.dpdm.taskhub.dao.TaskRepository;
 import br.edu.ifsp.dpdm.taskhub.model.Task;
@@ -18,8 +20,7 @@ public class TaskDAO extends TaskRepository<Task> {
 
     public TaskDAO(Context context) {
         super(context);
-        fields = new String[]{"id", "title", "description", "deadline",
-        "priority", "completed"};
+        fields = new String[]{"id", "title", "description", "deadline", "priority", "completed"};
         tableName = "task";
         this.database = getWritableDatabase();
     }
@@ -56,7 +57,7 @@ public class TaskDAO extends TaskRepository<Task> {
 
     public List<Task> listAll() {
         List<Task> list = new ArrayList<Task>();
-        Cursor cursor = executeSelect(null, null, "1");
+        Cursor cursor =  executeSelect(null, null, "1");
 
         if (cursor != null && cursor.moveToFirst()) {
             do {
@@ -90,14 +91,16 @@ public class TaskDAO extends TaskRepository<Task> {
 
 
     private Task serializeByCursor(Cursor cursor) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat parserSDF = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", Locale.ENGLISH);
+
         Task task = new Task();
 
         try {
+            Log.v("TaskDAO", "cursor: " + cursor);
             task.setId(cursor.getInt(0));
             task.setTitle(cursor.getString(1));
             task.setDescription(cursor.getString(2));
-            task.setDeadline(dateFormat.parse(cursor.getString(3)));
+            task.setDeadline(parserSDF.parse(cursor.getString(3)));
             task.setPriority(cursor.getString(4));
             task.setCompleted(cursor.getInt(5) == 1);
         } catch (Exception ignored) {}
@@ -113,12 +116,12 @@ public class TaskDAO extends TaskRepository<Task> {
         values.put("description", task.getDescription());
         values.put("deadline", String.valueOf(task.getDeadline()));
         values.put("priority", task.getPriority());
-        values.put("completed", task.isCompleted());
+        values.put("completed", task.isCompleted()? 1 : 0);
 
         return values;
     }
 
-    private Cursor executeSelect(String selection, String[] selectionArgs, String orderBy) {
+    private Cursor  executeSelect(String selection, String[] selectionArgs, String orderBy) {
         return database.query(tableName,
                 fields,
                 selection,

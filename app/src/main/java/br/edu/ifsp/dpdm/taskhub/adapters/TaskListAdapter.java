@@ -51,7 +51,7 @@ public class TaskListAdapter extends BaseAdapter {
         description.setText("Description: " + t.getDescription());
 
         TextView deadline = (TextView) view.findViewById(R.id.txtDeadlineTask);
-        deadline.setText("Deadline: " + t.getPriority());
+        deadline.setText("Deadline: " + t.getDeadline());
 
         TextView priority = (TextView) view.findViewById(R.id.txtPriority);
         priority.setText("Priority: " + t.getPriority());

@@ -1,8 +1,13 @@
 package br.edu.ifsp.dpdm.taskhub.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import java.util.Date;
 
-public class Task {
+public class Task implements Parcelable {
     private int id;
     private String title;
     private String description;
@@ -19,6 +24,26 @@ public class Task {
         this.priority = priority;
         this.completed = completed;
     }
+
+    protected Task(Parcel in) {
+        id = in.readInt();
+        title = in.readString();
+        description = in.readString();
+        priority = in.readString();
+        completed = in.readByte() != 0;
+    }
+
+    public static final Creator<Task> CREATOR = new Creator<Task>() {
+        @Override
+        public Task createFromParcel(Parcel in) {
+            return new Task(in);
+        }
+
+        @Override
+        public Task[] newArray(int size) {
+            return new Task[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -55,7 +80,6 @@ public class Task {
     public String getPriority() {
         return priority;
     }
-
     public void setPriority(String priority) {
         this.priority = priority;
     }
@@ -66,5 +90,19 @@ public class Task {
 
     public void setCompleted(boolean completed) {
         this.completed = completed;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(title);
+        dest.writeString(description);
+        dest.writeString(priority);
+        dest.writeByte((byte) (completed ? 1 : 0));
     }
 }

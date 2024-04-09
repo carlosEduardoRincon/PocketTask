@@ -15,9 +15,10 @@ public class TaskRepository<T extends Object> extends SQLiteOpenHelper {
 
     public static final String CREATE_TABLE_TASK = "CREATE TABLE task ("
             + " id integer primary key autoincrement NOT NULL,"
-            + " description varchar(200),"
             + " title varchar(75),"
-            + " deadline varchar(75),"
+            + " description varchar(200),"
+            + " deadline datetime(75),"
+            + " priority varchar(75),"
             + " completed int);";
 
     public TaskRepository(Context context) {
