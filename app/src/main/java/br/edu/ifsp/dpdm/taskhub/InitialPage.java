@@ -35,12 +35,6 @@ public class InitialPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.initial_page);
 
-        Button openTaskForm = findViewById(R.id.btAdd);
-        openTaskForm.setOnClickListener(arg0 -> {
-            Intent it = new Intent(getApplicationContext(), TaskManager.class).putExtra("operation", "update");
-            mStartForResult.launch(it);
-        });
-
         tasks = new ArrayList<>();
         operation = "New";
 
@@ -48,6 +42,13 @@ public class InitialPage extends AppCompatActivity {
         lvTasks.setOnItemClickListener(selectTasks);
         lvTasks.setOnItemLongClickListener(removeTask);
         taskDAO = new TaskDAO(getApplicationContext());
+
+        Button openTaskForm = findViewById(R.id.btAdd);
+        openTaskForm.setOnClickListener(arg0 -> {
+            Intent it = new Intent(getApplicationContext(), TaskManager.class).putExtra("operation", "update");
+            mStartForResult.launch(it);
+        });
+
         refreshList();
     }
 
@@ -63,9 +64,9 @@ public class InitialPage extends AppCompatActivity {
 
     private void removeTask(final int idFuncionario) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Excluir funcionario?")
+        builder.setTitle("Remove task?")
                 .setIcon(android.R.drawable.ic_dialog_alert)
-                .setMessage("Deseja excluir essa funcionario?")
+                .setMessage("Do you want to remove this task?")
                 .setCancelable(false)
                 .setPositiveButton(getString(R.string.sim),
                         (dialog, id) -> {

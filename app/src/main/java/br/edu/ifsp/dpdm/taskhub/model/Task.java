@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import java.util.Date;
 
 public class Task implements Parcelable {
-    private int id;
+    private Integer id;
     private String title;
     private String description;
     private Date deadline;
@@ -45,11 +45,11 @@ public class Task implements Parcelable {
         }
     };
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

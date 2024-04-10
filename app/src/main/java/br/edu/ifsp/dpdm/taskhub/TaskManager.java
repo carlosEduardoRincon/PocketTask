@@ -38,7 +38,7 @@ public class TaskManager extends Activity {
 
     private String operation;
     private Spinner spPriority;
-    private String[] priorities = {"High", "Medium", "Easy"};
+    private String[] priorities = {"High", "Medium", "Low"};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,7 +89,7 @@ public class TaskManager extends Activity {
 
     public void saveTask(View v) {
 
-        if (operation.equalsIgnoreCase("New")) {
+        if (operation != null && operation.equalsIgnoreCase("New")) {
             t = new Task();
         }
 
@@ -97,14 +97,14 @@ public class TaskManager extends Activity {
         t.setDescription(edDescription.getText().toString());
         t.setPriority(priorities[spPriority.getSelectedItemPosition()]);
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
         try {
             t.setDeadline((dateFormat.parse(edDeadline.getText().toString())));
         } catch (ParseException e) {/*IGNORE*/}
         t.setCompleted(ckCompleted.isChecked());
 
-        if (operation.equalsIgnoreCase("new")) {
+        if (operation != null && operation.equalsIgnoreCase("new")) {
             taskDAO.salvar(t);
             showMessage("Task added with success!");
         } else {
@@ -131,6 +131,7 @@ public class TaskManager extends Activity {
 
 
     public void loadData(Task task) {
+        t = task;
         edID.setText(String.valueOf(task.getId()));
         edTitle.setText(task.getTitle());
         edDescription.setText(task.getDescription());
@@ -143,7 +144,7 @@ public class TaskManager extends Activity {
         int selectionPosition = 0;
         if (priority.equalsIgnoreCase("Medium")) {
             selectionPosition = 1;
-        } else if (priority.equalsIgnoreCase("Easy")) {
+        } else if (priority.equalsIgnoreCase("Low")) {
             selectionPosition = 2;
         }
         spPriority.setSelection(selectionPosition);

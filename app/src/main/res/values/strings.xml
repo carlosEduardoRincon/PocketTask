@@ -3,13 +3,10 @@
     <string name="menu_settings">Settings</string>
     <string name="title_activity_main">Cadastro de Funcionários BD</string>
     <string name="id">Id:</string>
-    <string name="nome">Nome:</string>
-    <string name="idade">Idade:</string>
-    <string name="sexo">Sexo:</string>
-    <string name="salvar">Salvar</string>
-    <string name="novo">Novo</string>
-    <string name="sim">Sim</string>
-    <string name="nao">Não</string>
-    <string name="msgExclusao">Funcionário excluído com sucesso!</string>
-    <string name="msgFalhaExclusao">Não foi possível excluir o funcionário!</string>
+    <string name="salvar">Save</string>
+    <string name="novo">New</string>
+    <string name="sim">Yes</string>
+    <string name="nao">No</string>
+    <string name="msgExclusao">Task added with success!</string>
+    <string name="msgFalhaExclusao">Not possible to remove task!</string>
 </resources>

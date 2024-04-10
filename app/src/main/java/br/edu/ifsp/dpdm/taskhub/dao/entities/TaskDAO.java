@@ -8,6 +8,7 @@ import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -91,8 +92,8 @@ public class TaskDAO extends TaskRepository<Task> {
 
 
     private Task serializeByCursor(Cursor cursor) {
-        SimpleDateFormat parserSDF = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", Locale.ENGLISH);
-
+        SimpleDateFormat inputFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'GMT'Z yyyy", Locale.ENGLISH);
+        SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy");
         Task task = new Task();
 
         try {
@@ -100,7 +101,12 @@ public class TaskDAO extends TaskRepository<Task> {
             task.setId(cursor.getInt(0));
             task.setTitle(cursor.getString(1));
             task.setDescription(cursor.getString(2));
-            task.setDeadline(parserSDF.parse(cursor.getString(3)));
+
+            Date originalDate = inputFormat.parse(cursor.getString(3));
+            String formattedDateString = outputFormat.format(originalDate);
+            Date formattedDate = outputFormat.parse(formattedDateString);
+            task.setDeadline(formattedDate);
+
             task.setPriority(cursor.getString(4));
             task.setCompleted(cursor.getInt(5) == 1);
         } catch (Exception ignored) {}

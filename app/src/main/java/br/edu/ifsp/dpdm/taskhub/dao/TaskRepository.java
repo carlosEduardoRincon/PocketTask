@@ -19,7 +19,7 @@ public class TaskRepository<T extends Object> extends SQLiteOpenHelper {
             + " description varchar(200),"
             + " deadline datetime(75),"
             + " priority varchar(75),"
-            + " completed int);";
+            + " completed integer);";
 
     public TaskRepository(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

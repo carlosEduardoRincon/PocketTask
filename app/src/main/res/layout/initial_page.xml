@@ -32,7 +32,7 @@
 
     <Button
         android:id="@+id/btAdd"
-        android:layout_width="0dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="13dp"
         android:text="Add"
