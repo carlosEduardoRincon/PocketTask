@@ -31,6 +31,8 @@ public class Task implements Parcelable {
         description = in.readString();
         priority = in.readString();
         completed = in.readByte() != 0;
+        long tmpDate = in.readLong();
+        this.deadline = tmpDate == -1 ? null : new Date(tmpDate);
     }
 
     public static final Creator<Task> CREATOR = new Creator<Task>() {
@@ -104,5 +106,6 @@ public class Task implements Parcelable {
         dest.writeString(description);
         dest.writeString(priority);
         dest.writeByte((byte) (completed ? 1 : 0));
+        dest.writeLong(deadline != null ? deadline.getTime() : -1);
     }
 }

@@ -86,7 +86,7 @@ public class TaskDAO extends TaskRepository<Task> {
         ContentValues values = serializeContentValues(task);
         return database.update(tableName,
                 values,
-                "id = ? ",
+                "id = ?",
                 new String[]{String.valueOf(task.getId())}) > 0;
     }
 

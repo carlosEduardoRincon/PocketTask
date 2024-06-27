@@ -104,15 +104,22 @@ public class TaskManager extends Activity {
         } catch (ParseException e) {/*IGNORE*/}
         t.setCompleted(ckCompleted.isChecked());
 
-        if (operation != null && operation.equalsIgnoreCase("new")) {
-            taskDAO.salvar(t);
-            showMessage("Task added with success!");
+        if (t.getTitle() == null || t.getTitle().isEmpty() || t.getDescription() == null || t.getDescription().isEmpty() ||
+            t.getDeadline() == null || t.getPriority() == null) {
+            showMessage("All fields must be filled");
         } else {
-            taskDAO.atualizar(t);
-            showMessage("Task updated with success!");
+
+            if (operation != null && operation.equalsIgnoreCase("new")) {
+                taskDAO.salvar(t);
+                showMessage("Task added with success!");
+            } else {
+                taskDAO.atualizar(t);
+                showMessage("Task updated with success!");
+            }
+            cleanData();
         }
 
-        cleanData();
+
     }
 
     public void novo(View v) {
